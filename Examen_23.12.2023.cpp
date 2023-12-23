@@ -1,7 +1,8 @@
 ﻿//Разработка системы управления виртуальным зоопарком
 #include <iostream>
 #include<vector>
-
+#include<cctype>
+#include<string>
 using namespace std;
 
 // baise class Animall
@@ -10,9 +11,18 @@ private:
     string name;
     int healing = 100;
     int food = 100;
+    int age;
+    string sex;
 public:
-    Animal(string name) {
+    Animal(string name, int age, string sex) {
         this->name = name;
+        this->age = age;
+        if (sex == "he" or sex == "she") { this->sex = sex; }
+        else
+        {
+            throw exception("sex is not diferend!");
+
+        }
         
     }
 
@@ -61,21 +71,71 @@ public:
         
     }
 
+    int getAge() { return age; }
 
+    void addAge(int Age) {
+        if (Age > 0) {
+            if (0 > this->age + Age < 100) {
+                this->age += Age;
+            }
+            else
+            {
+                cout << "AGE OWER 100 YEAR" << endl;
+            }
+        }
+        else
+        {
+            cout << "invalid AGE!!!" << endl;
+        }
+    }
 
+    string getSex() { return sex; }
+
+    void Sex(string sex) {
+
+        if (sex == "he" or sex == "she") { this->sex = sex; }
+        else
+        {
+            throw exception("sex is not diferend!");
+
+        }
+    }
+
+    void getAnimalInfo() {
+        string HP;
+
+        if (getHealing() == 0) { HP = "is DEATH!"; }
+        else
+        {
+            HP = to_string(getHealing());
+        }
+
+        cout << "NAME: " <<getName() << endl
+            << "AGE: " << getAge() <<" Year!" << endl
+            << "its: " << getSex() << endl
+            << "HP: " << HP << endl
+            << "FOOD: " <<getFood() << endl << endl;
+    }
 };
     
-
+//Базовый клас роботник 
 
 class Emploue {
 private:
     string name;
     int age;
+    string sex;
 
 public:
     Emploue(string name, int age) {
         this->name = name;
         this->age = age;
+        if (sex == "man" or sex == "woman") { this->sex = sex; }
+        else
+        {
+            throw exception("is sex ont diferend! ");
+
+        }
     }
 
     string getName() { return name; }
@@ -84,6 +144,52 @@ public:
     int getAge() { return age; }
 
     void setAge(int age) { this->age = age; }
+
+    string getSex() { return sex; }
+
+    void getSex(string sex) {
+
+        if (sex == "man" or sex == "woman") { this->sex = sex; }
+        else
+        {
+            throw exception("is sex ont diferend! ");
+
+        }
+    }
+};
+
+
+//клас вольер 
+class Enclouse {
+private:
+    int size;
+    vector<Animal> Animals;
+
+public:
+
+    Enclouse(int size) { this->size = size; }
+
+    void getInfoEnclouse() {
+        for (int i = 0; i < Animals.size(); i++) {
+            cout << "it " << i << endl;
+            Animals[i].getAnimalInfo();
+            cout << endl << endl;
+        }
+    }
+
+    void AddAnimal(Animal animal) {
+        if (size > Animals.size()) {
+            Animals.push_back(animal);
+            cout << "Animal its ADD to ENCLOUSE!" << endl;
+        }
+        else { throw exception("Enclouse is maximum!"); }
+    }
+
+    void RemoveAnimal(int it) {
+        cout << "Animal its DELETED! " << endl;
+        Animals[it].getAnimalInfo();
+        Animals.erase(Animals.begin() + it);
+    }
 };
 
 
@@ -91,30 +197,36 @@ public:
 
 void main()
 {
-    /*Animal cat("jony");
 
-    cout <<cat.getName()<< endl;
-    cout<<cat.getHealing()<<endl;
-    cat.addHealing(-50);
-    cout << cat.getHealing() << endl;
-    cat.addHealing(20);
-    cout << cat.getHealing() << endl;
-    cat.addHealing(-710);
+    try
+    {
+        Animal cat("Murzik", 3, "she");
+        Animal dog("Smurf", 4, "he");
+        Animal chiken("Coco", 6, "he");
 
-    cout << cat.getHealing() << endl;
-    cat.addHealing(2);
-    cout << cat.getHealing() << endl;
 
-    cout << "FOOD "<< cat.getFood() << endl;
 
-    cat.addFood(20);
-    cout << "FOOD " << cat.getFood() << endl;
 
-    cat.addFood(-40);
-    cout << "FOOD " << cat.getFood() << endl;
-    cat.addFood(-60);
-    cout << "FOOD " << cat.getFood() << endl;*/
+        Enclouse cage(2);
 
+        cage.AddAnimal(cat);
+
+        cage.AddAnimal(dog);
+
+        cage.AddAnimal(chiken);
+
+        cage.getInfoEnclouse();
+
+        
+        
+
+    }
+    catch (const std::exception& err)
+    {
+        cout << err.what() << endl;
+    }
+    
+    
 
 }
-
+ 
