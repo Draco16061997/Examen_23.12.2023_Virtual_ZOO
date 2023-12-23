@@ -72,6 +72,18 @@ private:
     string name;
     int age;
 
+public:
+    Emploue(string name, int age) {
+        this->name = name;
+        this->age = age;
+    }
+
+    string getName() { return name; }
+    void setName(string name) { this->name = name; }
+
+    int getAge() { return age; }
+
+    void setAge(int age) { this->age = age; }
 };
 
 
