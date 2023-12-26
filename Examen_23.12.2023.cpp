@@ -188,7 +188,7 @@ private:
     string sex;
 
 public:
-    Emploue(string name, int age) {
+    Employee(string name, int age) {
         this->name = name;
         this->age = age;
         if (sex == "man" or sex == "woman") { this->sex = sex; }
