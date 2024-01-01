@@ -145,7 +145,7 @@ public:
             << "AGE: " << getAge() << " Year!" << endl
             << "its: " << getSex() << endl
             << "HP: " << HP << endl
-            << "HP: " << (this->healing == 0 ? "is Death!" : to_string(this->healing))
+          /*  << "HP: " << (this->healing == 0 ? "is Death!" : to_string(this->healing))*/
             << "FOOD: " <<getFood() << endl << endl;
     }
 };
@@ -178,17 +178,41 @@ public:
     
 };
 
+class Pinguin : public Animal {
+private:
+    int* watIsSky = &skyNowIt;
+    int* wathIstemp = &temp;
+public:
+    void PrintTempReaction() {
+        cout << "Reaction of temperature ";
+
+        if (*wathIstemp >= 30 and *watIsSky == 1) {
+            cout << "is HOOT!" << endl;
+        }
+        else if (0 < *wathIstemp and *wathIstemp <= 15) {
+            cout << "is Normal" << endl;
+        }
+        else if (15 < *wathIstemp and *wathIstemp < 30) {
+            cout << "is GOOD!" << endl;
+        }
+
+        else { cout << "is CHOLD" << endl; }
+    }
+};
+
+
+// От класа Анимал строим другие класи животних
 
 //Базовый клас роботник 
 
-class Employee {
+class Human {
 private:
     string name;
     int age;
     string sex;
 
 public:
-    Employee(string name, int age) {
+    Human(string name, int age, string sex) {
         this->name = name;
         this->age = age;
         if (sex == "man" or sex == "woman") { this->sex = sex; }
@@ -217,7 +241,37 @@ public:
 
         }
     }
+
+    virtual void PrintInfo() {
+        cout <<"Name: "<< getName() << endl
+             <<"Age: "<< getAge() << endl
+             <<"Sex: "<< getSex() << endl;
+    }
 };
+
+class Guest :public Human {
+private:
+    float money;
+
+public:
+    Guest(string name, int age, string sex, float money) : Human(name, age, sex){
+        this->money = money;
+    }
+
+    float GetMoney() { return money; }
+
+    void AddMoney(float money) {
+        this->money + money >= 0 ? this->money += money : throw exception("No money!");
+    }
+
+    void PrintInfo() override {
+        cout << "Name: " << getName() << endl
+            << "Age: " << getAge() << endl
+            << "Sex: " << getSex() << endl<<
+            "money: " << this->money << endl;
+    }
+};
+
 
 
 //клас вольер 
@@ -231,7 +285,7 @@ public:
 
     Enclouse(int size, string name) { this->size = size; this->name = name; }
 
-    void getInfoEnclouse() {
+    void PrintInfoEnclouse() {
         for (int i = 0; i < Animals.size(); i++) {
             cout <<"cahe "<<name<< " it " << i << endl;
             Animals[i].PrintAnimalInfo();
@@ -261,65 +315,162 @@ public:
 };
 
 
+class Zoo {
+private:
+    vector<Enclouse> Enclouses;
+    vector<Human>Emploues;
+    vector<Guest> Guests;
+    float money;
+    int food;
+    float cost;
+
+public:
+    Zoo(float money, int food, float cost) {
+        this->money = money;
+        this->food = food;
+        this->cost = cost;
+    }
+
+
+    void addMoney(float money) {
+        this->money + money >= 0 ? this->money += money : throw exception("no money");
+    }
+
+    float getMoney() { return money; }
+
+
+    void addFood(int food) {
+        this->food + food >= 0 ? this->money += money : throw exception("no food");
+    }
+
+    int getFood() { return food; }
+
+
+    void AddEmplouse(Human emplouse) {
+        Emploues.push_back(emplouse);
+        emplouse.PrintInfo();
+        cout << "ADD!!!" << endl;
+    }
+
+    void RemoveEmplouse(int id) {
+        if (id < Emploues.size()) {
+            Emploues.erase(Emploues.begin() + id);
+            cout << id << " DELETED!" << endl;
+        }
+        else { cout << "Not DELETED!"<<endl; }
+    }
+
+    void PrintInfoEmplouse() {
+        for (int i = 0; i < Emploues.size(); i++) {
+            cout << "===============================" << endl;
+            cout << "id: " << i << endl;
+            Emploues[i].PrintInfo();
+            cout << "===============================" << endl;
+        }
+    }
+
+
+    void AddGuest(Guest guest) {
+        if (guest.GetMoney() > this->cost) {
+            guest.AddMoney(-cost);
+            Guests.push_back(guest);
+            this->money += cost;
+            cout << guest.getName() <<" Welcome to ZOO!!!" << endl;
+        }
+        else
+        {
+            cout << guest.getName() << " No Money! " << endl;
+        }
+    }
+
+    void PrintInfoGuest() {
+        if (not Guests.empty()) {
+            for (int i = 0; i < Guests.size(); i++) {
+                cout << "===============================" << endl;
+                cout << "id: " << i << endl;
+                Guests[i].PrintInfo();
+                cout << "===============================" << endl;
+            }
+        }
+        else { cout << "is Not Guset!!!" << endl; }
+       
+    
+    }
+
+    void RemoveGuest(int id) {
+        if (id < Guests.size()) {
+            Guests.erase(Guests.begin() + id);
+            cout << id << " DELETED!" << endl;
+        }
+        else { cout << "Not DELETED!" << endl; }
+    }
+
+
+    void AddEnclouse(Enclouse enclouse) {
+        Enclouses.push_back(enclouse);
+        cout <<enclouse.getName()<< " Add enclouses" << endl;
+        
+        enclouse.PrintInfoEnclouse();
+    }
+
+    void RemoveEnclouse(int id) {
+        if (id < Enclouses.size()) {
+            cout << "id: " << id << " name: " << Enclouses[id].getName() << " DELETED!" << endl;
+            Enclouses.erase(Enclouses.begin() + id);
+            
+        }
+        else { cout << "Not DELETED!" << endl; }
+    }
+
+    void PrintEnclouseInfo() {
+        if (not Enclouses.empty()) {
+            for (int i = 0; i < Enclouses.size(); i++) {
+                cout << "===============================" << endl;
+                cout << "id: " << i << endl;
+                cout<<Enclouses[i].getName()<< endl;
+                cout << "===============================" << endl;
+            }
+        }
+        else { cout << "is Not Guset!!!" << endl; }
+    }
+
+
+
+};
+
 
 
 void main()
 {
 
-    //try
-    //{
-    //    Animal cat("Murzik", 3, "she");
-    //    Animal dog("Smurf", 4, "he");
-    //    Animal chiken("Coco", 6, "he");
-
-
-
-
-    //    Enclouse cage(2,"kyratnik");
-
-    //    cage.AddAnimal(cat);
-
-    //    cage.AddAnimal(dog);
-
-    //    //cage.AddAnimal(chiken);
-
-    //    cage.getInfoEnclouse();
-
-    //    
-    //    
-
-    //}
-    //catch (const std::exception& err)
-    //{
-    //    cout << err.what() << endl;
-    //}
-    //
-
-
-    /*cout << skyNowIt << endl;
-    try
-    {
-        setSky("rain");
-    }
-    catch (const std::exception&er)
-    {
-        cout << er.what();
-    }
-    
-    cout << skyNowIt << endl;*/
 
 
     Lion Vasya("Vasya",3, "he");
-    Vasya.PrintAnimalInfo();
+   
 
- 
+    Lion Petya("Petya", 4, "he");
 
     temp = 32;
-    Vasya.PrintTempReaction();
-    temp = 13;
-    Vasya.PrintTempReaction();
-    temp = -17;
-    Vasya.PrintTempReaction();
     
+    Vasya.PrintAnimalInfo();
+    Petya.PrintAnimalInfo();
+
+    Petya.addHealing(-40);
+
+    Vasya.PrintAnimalInfo();
+    Petya.PrintAnimalInfo();
+    Human Grisha("Grisha", 23, "man");
+    Guest Yriy("Yriy", 25, "man",300);
+    Enclouse ku(3, "kuratnik");
+    Zoo zoo(122, 12, 10);
+
+   
+    zoo.AddGuest(Yriy);
+    zoo.PrintInfoGuest();
+    zoo.RemoveGuest(0);
+    zoo.PrintInfoGuest();
+    zoo.AddEnclouse(ku);
+    zoo.PrintEnclouseInfo();
+    zoo.RemoveEnclouse(0);
 };
  
